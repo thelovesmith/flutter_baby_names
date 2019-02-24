@@ -3,14 +3,6 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-// final dummySnapshot = [
-//  {"name": "Avery", "votes": 10},
-//  {"name": "Abraham", "votes": 14},
-//  {"name": "Richard", "votes": 11},
-//  {"name": "Ike", "votes": 10},
-//  {"name": "Justin", "votes": 1},
-// ];
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -119,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
+
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     return ListView(
       padding: const EdgeInsets.only(top: 20.0),
@@ -126,6 +119,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
+
+//All the firestore logic is located in this widget 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
     final record = Record.fromSnapshot(data);
 
@@ -183,7 +178,7 @@ class Record {
 ////////////////////////////
 ////////////////////////////
 ////////////////////////////
-/// BELOW ARE THE WIDGETS FOR THE SECOND ROUTE tabBar
+/// BELOW ARE THE WIDGETS FOR THE SECOND Page ROUTE tabBar
 class Choice {
   const Choice({this.title, this.icon});
 
