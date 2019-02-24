@@ -35,9 +35,38 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('Baby Name Votes'),
         backgroundColor: Color.fromRGBO(46, 204, 113, 1),
+        actions: <Widget>[
+          new IconButton(
+            icon: const Icon(Icons.video_library),
+            onPressed: _otherPage,
+          )
+        ],
       ),
       body: _buildBody(context),
     );
+  }
+  // Navigator.push, as shown below, which pushes the route to the Navigator's stack
+  void _otherPage() {
+    Navigator.push(context, MaterialPageRoute<void>(
+  builder: (BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('My Page'),
+        backgroundColor: Color.fromRGBO(46, 204, 113, 1),
+        ),
+      body: Center(
+        child: FlatButton(
+          child: Text('POP'),
+          color: Colors.lightGreen,
+          onPressed: () {
+            Navigator.pop(context);
+            print('popped');
+          },
+        ),
+      ),
+    );
+  },
+));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -80,9 +109,11 @@ class _MyHomePageState extends State<MyHomePage> {
           onTap: () => Firestore.instance.runTransaction((transaction) async {
                 final freshSnapshot = await transaction.get(record.reference);
                 final fresh = Record.fromSnapshot(freshSnapshot);
+                print('vote');
 
                 await transaction
                     .update(record.reference, {'votes': fresh.votes + 1});
+
               }),
           //instead of just printing the record to the console, this new line updates the baby name's database reference by incrementing the vote count by one.
           //  onTap: () => record.reference.updateData({'votes': record.votes + 1}),
