@@ -28,7 +28,9 @@ class MyHomePage extends StatefulWidget {
   }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+
+
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,35 +40,58 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: <Widget>[
           new IconButton(
             icon: const Icon(Icons.video_library),
-            onPressed: _otherPage,
+            onPressed: _otherPage, //activates otherpage navigator widget
           )
         ],
       ),
       body: _buildBody(context),
     );
   }
-  // Navigator.push, as shown below, which pushes the route to the Navigator's stack
+
+  //this is the second route that has the TabBar with the different categories 
+  //The data for the dat bars are located below 
   void _otherPage() {
     Navigator.push(context, MaterialPageRoute<void>(
-  builder: (BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('My Page'),
-        backgroundColor: Color.fromRGBO(46, 204, 113, 1),
-        ),
-      body: Center(
-        child: FlatButton(
-          child: Text('POP'),
-          color: Colors.lightGreen,
-          onPressed: () {
-            Navigator.pop(context);
-            print('popped');
-          },
-        ),
-      ),
-    );
-  },
-));
+      builder: (BuildContext context) {
+        return MaterialApp(
+          home: DefaultTabController(
+            length: choices.length,
+            child: Scaffold(
+              appBar: AppBar(
+                actions: <Widget>[
+                  new IconButton(
+                    icon: const Icon(Icons.home),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      print('going home');
+                    },
+                  )
+                ],
+                backgroundColor: Color.fromRGBO(46, 204, 113, 1),
+                title: const Text('Second PAge'),
+                bottom: TabBar(
+                  isScrollable: true,
+                  tabs: choices.map((Choice choice) {
+                    return Tab(
+                      text: choice.title,
+                      icon: Icon(choice.icon),
+                    );
+                  }).toList(),
+                ),
+              ),
+              body: TabBarView(
+                children: choices.map((Choice choice) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ChoiceCard(choice: choice),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        );
+      },
+    ));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -113,7 +138,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 await transaction
                     .update(record.reference, {'votes': fresh.votes + 1});
-
               }),
           //instead of just printing the record to the console, this new line updates the baby name's database reference by incrementing the vote count by one.
           //  onTap: () => record.reference.updateData({'votes': record.votes + 1}),
@@ -140,4 +164,50 @@ class Record {
 
   @override
   String toString() => "Record<$name:$votes>";
+}
+
+
+////////////////////////////
+////////////////////////////
+////////////////////////////
+////////////////////////////
+////////////////////////////
+/// BELOW ARE THE WIDGETS FOR THE SECOND ROUTE tabBar
+class Choice {
+  const Choice({this.title, this.icon});
+
+  final String title;
+  final IconData icon;
+}
+
+// the widgets and their icons
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'MUSIC', icon: Icons.library_music),
+  const Choice(title: 'VIDEOS', icon: Icons.video_library),
+  const Choice(title: 'NEWS', icon: Icons.rss_feed),
+  const Choice(title: 'PODCASTS', icon: Icons.record_voice_over),
+];
+
+
+//Cards to display the widgets in the body once tehy are selected 
+class ChoiceCard extends StatelessWidget {
+  const ChoiceCard({Key key, this.choice}) : super(key: key);
+  final Choice choice;
+  @override
+  Widget build(BuildContext context) {
+    final TextStyle textStyle = Theme.of(context).textTheme.display1;
+    return Card(
+      color: Colors.greenAccent,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Icon(choice.icon, size: 128.0, color: textStyle.color),
+            Text(choice.title, style: textStyle),
+          ],
+        ),
+      ),
+    );
+  }
 }
