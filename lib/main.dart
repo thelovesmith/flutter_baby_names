@@ -57,6 +57,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           home: DefaultTabController(
             length: choices.length,
             child: Scaffold(
+              bottomNavigationBar: TabBar(
+                indicatorColor: Colors.greenAccent,
+                labelColor: Colors.deepOrange,
+                  isScrollable: true,
+                  tabs: choices.map((Choice choice) {
+                    return Tab(
+                      text: choice.title,
+                      icon: Icon(choice.icon),
+                    );
+                  }).toList(),
+                ),
               appBar: AppBar(
                 actions: <Widget>[
                   new IconButton(
@@ -68,16 +79,16 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   )
                 ],
                 backgroundColor: Color.fromRGBO(46, 204, 113, 1),
-                title: const Text('Second PAge'),
-                bottom: TabBar(
-                  isScrollable: true,
-                  tabs: choices.map((Choice choice) {
-                    return Tab(
-                      text: choice.title,
-                      icon: Icon(choice.icon),
-                    );
-                  }).toList(),
-                ),
+                title: const Text('Second Page'),
+                // bottom: TabBar(
+                //   isScrollable: true,
+                //   tabs: choices.map((Choice choice) {
+                //     return Tab(
+                //       text: choice.title,
+                //       icon: Icon(choice.icon),
+                //     );
+                //   }).toList(),
+                // ),
               ),
               body: TabBarView(
                 children: choices.map((Choice choice) {
